@@ -21,7 +21,7 @@ from .relevance import Relevance
 from .sensitive import Sensitive
 from .sentiment import Sentiment
 from .toxicity import Toxicity
-from .url_reachabitlity import URLReachability
+from .url_reachability import URLReachability
 
 
 def get_scanner_by_name(scanner_name: str, scanner_config: Optional[Dict] = None) -> Scanner:
