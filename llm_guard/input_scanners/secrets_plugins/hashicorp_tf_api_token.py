@@ -2,6 +2,8 @@
 This plugin searches for HashiCorp Terraform user/org API tokens.
 """
 
+from __future__ import annotations
+
 import re
 
 from detect_secrets.plugins.base import RegexBasedDetector

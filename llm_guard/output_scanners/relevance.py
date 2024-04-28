@@ -1,4 +1,6 @@
-from typing import Optional
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Final
 
 from llm_guard.model import Model
 from llm_guard.transformers_helpers import get_tokenizer, is_onnx_supported
@@ -8,7 +10,7 @@ from .base import Scanner
 
 LOGGER = get_logger()
 
-MODEL_EN_BGE_BASE = Model(
+MODEL_EN_BGE_BASE: Final[Model] = Model(
     path="BAAI/bge-base-en-v1.5",
     revision="a5beb1e3e68b9ab74eb54cfd186867f64f240e1a",
     onnx_path="BAAI/bge-base-en-v1.5",
@@ -16,20 +18,24 @@ MODEL_EN_BGE_BASE = Model(
     onnx_filename="model.onnx",
     onnx_revision="a5beb1e3e68b9ab74eb54cfd186867f64f240e1a",
 )
-MODEL_EN_BGE_LARGE = Model(
+MODEL_EN_BGE_LARGE: Final[Model] = Model(
     path="BAAI/bge-large-en-v1.5",
     revision="d4aa6901d3a41ba39fb536a557fa166f842b0e09",
     onnx_path="BAAI/bge-large-en-v1.5",
     onnx_subfolder="onnx",
     onnx_revision="d4aa6901d3a41ba39fb536a557fa166f842b0e09",
 )
-MODEL_EN_BGE_SMALL = Model(
+MODEL_EN_BGE_SMALL: Final[Model] = Model(
     path="BAAI/bge-small-en-v1.5",
     revision="5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
     onnx_path="BAAI/bge-small-en-v1.5",
     onnx_revision="5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
     onnx_subfolder="onnx",
 )
+
+if TYPE_CHECKING:
+    import numpy as np
+    import torch
 
 torch = lazy_load_dep("torch")
 np = lazy_load_dep("numpy")
@@ -48,9 +54,9 @@ class Relevance(Scanner):
         self,
         *,
         threshold: float = 0.5,
-        model: Optional[Model] = None,
+        model: Model | None = None,
         use_onnx: bool = False,
-    ):
+    ) -> None:
         """
         Initializes an instance of the Relevance class.
 
@@ -129,7 +135,7 @@ class Relevance(Scanner):
 
         return embeddings[0]
 
-    def scan(self, prompt: str, output: str) -> (str, bool, float):
+    def scan(self, prompt: str, output: str) -> tuple[str, bool, float]:
         if output.strip() == "":
             return output, True, 0.0
 

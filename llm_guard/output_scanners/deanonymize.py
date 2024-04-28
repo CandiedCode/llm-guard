@@ -1,6 +1,7 @@
+from __future__ import annotations
+
 import re
 from enum import Enum
-from typing import List, Tuple, Union
 
 from llm_guard.util import get_logger, lazy_load_dep
 from llm_guard.vault import Vault
@@ -21,13 +22,13 @@ class MatchingStrategy(Enum):
     COMBINED_EXACT_FUZZY = "combined_exact_fuzzy"
 
     @staticmethod
-    def _match_exact(text: str, vault_items: List[Tuple]) -> str:
+    def _match_exact(text: str, vault_items: list[tuple]) -> str:
         """
         Replaces placeholders in the model output with real values from the vault.
 
         Parameters:
             text (str): The model output.
-            vault_items (List[Tuple]): The list of items in the vault.
+            vault_items (list[Tuple]): The list of items in the vault.
         """
         for vault_item in vault_items:
             LOGGER.debug("Replaced placeholder with real value", placeholder=vault_item[0])
@@ -36,7 +37,7 @@ class MatchingStrategy(Enum):
         return text
 
     @staticmethod
-    def _match_case_insensitive(text: str, vault_items: List[Tuple]) -> str:
+    def _match_case_insensitive(text: str, vault_items: list[tuple]) -> str:
         """
         It replaces all the anonymized entities with the original ones
         irrespective of their letter case.
@@ -47,7 +48,7 @@ class MatchingStrategy(Enum):
 
         Parameters:
             text (str): The model output.
-            vault_items (List[Tuple]): The list of items in the vault.
+            vault_items (list[Tuple]): The list of items in the vault.
         """
         for vault_item in vault_items:
             LOGGER.debug("Replaced placeholder with real value", placeholder=vault_item[0])
@@ -57,7 +58,7 @@ class MatchingStrategy(Enum):
         return text
 
     @staticmethod
-    def _match_fuzzy(text: str, vault_items: List[Tuple], max_l_dist: int = 3) -> str:
+    def _match_fuzzy(text: str, vault_items: list[tuple], max_l_dist: int = 3) -> str:
         """
         It uses fuzzy matching to find the position of the anonymized entity in the text.
         It replaces all the anonymized entities with the original ones.
@@ -68,7 +69,7 @@ class MatchingStrategy(Enum):
 
         Parameters:
             text (str): The model output.
-            vault_items (List[Tuple]): The list of items in the vault.
+            vault_items (list[Tuple]): The list of items in the vault.
         """
 
         fuzzysearch = lazy_load_dep("fuzzysearch")
@@ -91,7 +92,7 @@ class MatchingStrategy(Enum):
 
         return text
 
-    def match(self, text: str, vault_items: List[Tuple]) -> str:
+    def match(self, text: str, vault_items: list[tuple]) -> str:
         if self == MatchingStrategy.EXACT:
             return self._match_exact(text, vault_items)
 
@@ -121,8 +122,8 @@ class Deanonymize(Scanner):
         self,
         vault: Vault,
         *,
-        matching_strategy: Union[MatchingStrategy, str] = MatchingStrategy.EXACT,
-    ):
+        matching_strategy: MatchingStrategy | str = MatchingStrategy.EXACT,
+    ) -> None:
         """
         Initializes an instance of the Deanonymize class.
 
@@ -136,7 +137,7 @@ class Deanonymize(Scanner):
         self._vault = vault
         self._matching_strategy = matching_strategy
 
-    def scan(self, prompt: str, output: str) -> (str, bool, float):
+    def scan(self, prompt: str, output: str) -> tuple[str, bool, float]:
         vault_items = self._vault.get()
         if len(vault_items) == 0:
             LOGGER.warning("No items found in the Vault")

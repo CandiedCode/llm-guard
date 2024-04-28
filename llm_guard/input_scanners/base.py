@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import Protocol
 
 
@@ -8,7 +10,7 @@ class Scanner(Protocol):
     This is used to ensure that the scanners implement a common interface and can be used interchangeably.
     """
 
-    def scan(self, prompt: str) -> (str, bool, float):
+    def scan(self, prompt: str) -> tuple[str, bool, float]:
         """
         Process and sanitize the input prompt according to the specific scanner's implementation.
 
@@ -20,3 +22,4 @@ class Scanner(Protocol):
             bool: A flag indicating whether the prompt is valid or not.
             float: Risk score where 0 means no risk and 1 means high risk.
         """
+        ...

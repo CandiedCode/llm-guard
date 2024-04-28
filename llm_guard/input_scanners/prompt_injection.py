@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 from enum import Enum
-from typing import List, Optional, Union
+from typing import Any, Final
 
 from llm_guard.model import Model
 from llm_guard.transformers_helpers import get_tokenizer_and_model_for_classification, pipeline
@@ -15,10 +17,10 @@ from .base import Scanner
 
 LOGGER = get_logger()
 
-PROMPT_CHARACTERS_LIMIT = 256
+PROMPT_CHARACTERS_LIMIT: Final[int] = 256
 
 # This model is proprietary but open source.
-V1_MODEL = Model(
+V1_MODEL: Final[Model] = Model(
     path="protectai/deberta-v3-base-prompt-injection",
     revision="f51c3b2a5216ae1af467b511bc7e3b78dc4a99c9",
     onnx_path="ProtectAI/deberta-v3-base-prompt-injection",
@@ -32,7 +34,7 @@ V1_MODEL = Model(
     },
 )
 
-V2_MODEL = Model(
+V2_MODEL: Final[Model] = Model(
     path="protectai/deberta-v3-base-prompt-injection-v2",
     revision="89b085cd330414d3e7d9dd787870f315957e1e9f",
     onnx_path="ProtectAI/deberta-v3-base-prompt-injection-v2",
@@ -56,12 +58,12 @@ class MatchType(Enum):
     TRUNCATE_HEAD_TAIL = "truncate_head_tail"
     CHUNKS = "chunks"
 
-    _tokenizer: Optional = None
+    _tokenizer: Any | None = None
 
-    def set_tokenizer(self, tokenizer):
+    def set_tokenizer(self, tokenizer) -> None:
         self._tokenizer = tokenizer
 
-    def get_inputs(self, prompt: str) -> List[str]:
+    def get_inputs(self, prompt: str) -> list[str]:
         if self == MatchType.SENTENCE:
             return split_text_by_sentences(prompt)
 
@@ -103,11 +105,11 @@ class PromptInjection(Scanner):
     def __init__(
         self,
         *,
-        model: Optional[Model] = None,
+        model: Model | None = None,
         threshold: float = 0.9,
-        match_type: Union[MatchType, str] = MatchType.FULL,
+        match_type: MatchType | str = MatchType.FULL,
         use_onnx: bool = False,
-    ):
+    ) -> None:
         """
         Initializes PromptInjection with a threshold.
 
@@ -144,7 +146,7 @@ class PromptInjection(Scanner):
         match_type.set_tokenizer(tf_tokenizer)
         self._match_type = match_type
 
-    def scan(self, prompt: str) -> (str, bool, float):
+    def scan(self, prompt: str) -> tuple[str, bool, float]:
         if prompt.strip() == "":
             return prompt, True, 0.0
 

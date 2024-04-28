@@ -2,6 +2,8 @@
 This plugin searches for Bitbucket Client ID and Client Secret
 """
 
+from __future__ import annotations
+
 import re
 
 from detect_secrets.plugins.base import RegexBasedDetector

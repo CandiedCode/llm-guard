@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 import copy
+from typing import Final
 
 import spacy
 from presidio_analyzer import (
@@ -18,19 +21,21 @@ from .predefined_recognizers.zh import CustomPatternRecognizer
 from .regex_patterns import RegexPattern
 from .transformers_recognizer import TransformersRecognizer
 
+DEFAULT_SUPPORTED_LANGUAGES: Final[list[str]] = ["en"]
+
 
 def _add_recognizers(
     registry: RecognizerRegistry,
     regex_groups: list[RegexPattern],
     custom_names: list[str],
-    supported_languages: list[str] = ["en"],
+    supported_languages: list[str] = DEFAULT_SUPPORTED_LANGUAGES,
 ) -> RecognizerRegistry:
     """
     Create a RecognizerRegistry and populate it with regex patterns and custom names.
 
     Parameters:
-        regex_groups: List of regex patterns.
-        custom_names: List of custom names to recognize.
+        regex_groups: list of regex patterns.
+        custom_names: list of custom names to recognize.
 
     Returns:
         RecognizerRegistry: A RecognizerRegistry object loaded with regex and custom name recognizers.
@@ -93,7 +98,7 @@ def _add_recognizers(
     return registry
 
 
-def _get_nlp_engine(languages: list[str] = ["en"]) -> NlpEngine:
+def _get_nlp_engine(languages: list[str] = DEFAULT_SUPPORTED_LANGUAGES) -> NlpEngine:
     models = []
 
     for language in languages:
@@ -139,7 +144,7 @@ def get_analyzer(
     recognizer: EntityRecognizer,
     regex_groups: list[RegexPattern],
     custom_names: list[str],
-    supported_languages: list[str] = ["en"],
+    supported_languages: list[str] = DEFAULT_SUPPORTED_LANGUAGES,
 ) -> AnalyzerEngine:
     nlp_engine = _get_nlp_engine(languages=supported_languages)
 

@@ -1,4 +1,4 @@
-from typing import Dict, Optional
+from __future__ import annotations
 
 from .ban_code import BanCode
 from .ban_competitors import BanCompetitors
@@ -24,7 +24,7 @@ from .toxicity import Toxicity
 from .url_reachability import URLReachability
 
 
-def get_scanner_by_name(scanner_name: str, scanner_config: Optional[Dict] = None) -> Scanner:
+def get_scanner_by_name(scanner_name: str, scanner_config: dict | None = None) -> Scanner:
     """
     Get scanner by name.
 

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from llm_guard.util import get_logger, lazy_load_dep
 
 from .base import Scanner
@@ -31,7 +33,7 @@ class Sentiment(Scanner):
         self._sentiment_analyzer = sentiment.SentimentIntensityAnalyzer()
         self._threshold = threshold
 
-    def scan(self, prompt: str) -> (str, bool, float):
+    def scan(self, prompt: str) -> tuple[str, bool, float]:
         sentiment_score = self._sentiment_analyzer.polarity_scores(prompt)
         sentiment_score_compound = sentiment_score["compound"]
         if sentiment_score_compound > self._threshold:

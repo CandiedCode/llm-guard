@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import Protocol
 
 
@@ -8,7 +10,7 @@ class Scanner(Protocol):
     This protocol defines the contract for classes that scan text outputs from a language model.
     """
 
-    def scan(self, prompt: str, output: str) -> (str, bool, float):
+    def scan(self, prompt: str, output: str) -> tuple[str, bool, float]:
         """
         Analyzes output of the model and returns sanitized output with a flag indicating if it is valid or malicious.
 
@@ -21,3 +23,4 @@ class Scanner(Protocol):
             bool: A flag indicating whether the output is valid or not.
             float: Risk score where 0 means no risk and 1 means high risk.
         """
+        ...

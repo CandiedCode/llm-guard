@@ -1,6 +1,8 @@
-import importlib
+from __future__ import annotations
+
+import importlib.util
 from functools import lru_cache
-from typing import Literal, Union, get_args
+from typing import Literal, get_args
 
 from transformers import (
     PreTrainedModel,
@@ -106,8 +108,8 @@ ClassificationTask = Literal["text-classification", "zero-shot-classification"]
 
 def pipeline(
     task: str,
-    model: Union[PreTrainedModel, TFPreTrainedModel],
-    tokenizer: Union[PreTrainedTokenizer, PreTrainedTokenizerFast],
+    model: PreTrainedModel | TFPreTrainedModel,
+    tokenizer: PreTrainedTokenizer | PreTrainedTokenizerFast,
     **kwargs,
 ):
     if task not in get_args(ClassificationTask):

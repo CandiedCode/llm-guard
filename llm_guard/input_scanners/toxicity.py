@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 from enum import Enum
-from typing import List, Optional, Union
+from typing import Final
 
 from llm_guard.model import Model
 from llm_guard.transformers_helpers import get_tokenizer_and_model_for_classification, pipeline
@@ -9,7 +11,7 @@ from .base import Scanner
 
 LOGGER = get_logger()
 
-DEFAULT_MODEL = Model(
+DEFAULT_MODEL: Final[Model] = Model(
     path="unitary/unbiased-toxic-roberta",
     revision="36295dd80b422dc49f40052021430dae76241adc",
     onnx_path="ProtectAI/unbiased-toxic-roberta-onnx",
@@ -24,7 +26,7 @@ DEFAULT_MODEL = Model(
     },
 )
 
-_toxic_labels = [
+_toxic_labels: Final[list[str]] = [
     "toxicity",
     "severe_toxicity",
     "obscene",
@@ -39,7 +41,7 @@ class MatchType(Enum):
     SENTENCE = "sentence"
     FULL = "full"
 
-    def get_inputs(self, prompt: str) -> List[str]:
+    def get_inputs(self, prompt: str) -> list[str]:
         if self == MatchType.SENTENCE:
             return split_text_by_sentences(prompt)
 
@@ -57,11 +59,11 @@ class Toxicity(Scanner):
     def __init__(
         self,
         *,
-        model: Optional[Model] = None,
+        model: Model | None = None,
         threshold: float = 0.5,
-        match_type: Union[MatchType, str] = MatchType.FULL,
+        match_type: MatchType | str = MatchType.FULL,
         use_onnx: bool = False,
-    ):
+    ) -> None:
         """
         Initializes Toxicity with a threshold for toxicity.
 
@@ -92,7 +94,7 @@ class Toxicity(Scanner):
             **model.pipeline_kwargs,
         )
 
-    def scan(self, prompt: str) -> (str, bool, float):
+    def scan(self, prompt: str) -> tuple[str, bool, float]:
         if prompt.strip() == "":
             return prompt, True, 0.0
 

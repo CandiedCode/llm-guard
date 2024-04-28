@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from __future__ import annotations
 
 import pytest
 
@@ -80,7 +80,7 @@ def test_scan_full(raw_prompt, output, expected_output, expected_valid, expected
         ),
     ],
 )
-def test_scan(vault_items: List[Tuple], output: str, expected_output: str, matching_strategy: str):
+def test_scan(vault_items: list[tuple], output: str, expected_output: str, matching_strategy: str):
     vault = Vault(vault_items)
     scanner = Deanonymize(vault, matching_strategy=MatchingStrategy(matching_strategy))
     sanitized_output, valid, score = scanner.scan("", output)

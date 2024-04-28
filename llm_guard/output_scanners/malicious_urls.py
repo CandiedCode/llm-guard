@@ -1,4 +1,6 @@
-from typing import Optional
+from __future__ import annotations
+
+from typing import Final
 
 from llm_guard.model import Model
 from llm_guard.transformers_helpers import get_tokenizer_and_model_for_classification, pipeline
@@ -7,7 +9,7 @@ from llm_guard.util import calculate_risk_score, extract_urls, get_logger
 from .base import Scanner
 
 LOGGER = get_logger()
-DEFAULT_MODEL = Model(
+DEFAULT_MODEL: Final[Model] = Model(
     path="DunnBC22/codebert-base-Malicious_URLs",
     revision="1221284b2495a4182cdb521be9d755de56e66899",
     onnx_path="ProtectAI/codebert-base-Malicious_URLs-onnx",
@@ -39,10 +41,10 @@ class MaliciousURLs(Scanner):
     def __init__(
         self,
         *,
-        model: Optional[Model] = None,
+        model: Model | None = None,
         threshold=0.5,
         use_onnx: bool = False,
-    ):
+    ) -> None:
         """
         Initializes an instance of the MaliciousURLs class.
 
@@ -69,7 +71,7 @@ class MaliciousURLs(Scanner):
             **model.pipeline_kwargs,
         )
 
-    def scan(self, prompt: str, output: str) -> (str, bool, float):
+    def scan(self, prompt: str, output: str) -> tuple[str, bool, float]:
         if output.strip() == "":
             return output, True, 0.0
 

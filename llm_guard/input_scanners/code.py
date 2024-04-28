@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 import re
-from typing import List, Optional, Sequence
+from typing import Final, Sequence
 
 from llm_guard.exception import LLMGuardValidationError
 from llm_guard.model import Model
@@ -10,7 +12,7 @@ from .base import Scanner
 
 LOGGER = get_logger()
 
-DEFAULT_MODEL = Model(
+DEFAULT_MODEL: Final[Model] = Model(
     path="philomath-1209/programming-language-identification",
     revision="9090d38e7333a2c6ff00f154ab981a549842c20f",
     onnx_path="philomath-1209/programming-language-identification",
@@ -24,7 +26,7 @@ DEFAULT_MODEL = Model(
     },
 )
 
-SUPPORTED_LANGUAGES = [
+SUPPORTED_LANGUAGES: Final[list[str]] = [
     "ARM Assembly",
     "AppleScript",
     "C",
@@ -66,11 +68,11 @@ class Code(Scanner):
         self,
         languages: Sequence[str],
         *,
-        model: Optional[Model] = None,
+        model: Model | None = None,
         is_blocked: bool = True,
         threshold: float = 0.5,
         use_onnx: bool = False,
-    ):
+    ) -> None:
         """
         Initializes Code with the allowed and denied languages.
 
@@ -109,7 +111,7 @@ class Code(Scanner):
         self._fenced_code_regex = re.compile(r"```(?:[a-zA-Z0-9]*\n)?(.*?)```", re.DOTALL)
         self._inline_code_regex = re.compile(r"`(.*?)`")
 
-    def _extract_code_blocks(self, markdown: str) -> List[str]:
+    def _extract_code_blocks(self, markdown: str) -> list[str]:
         # Extract fenced code blocks (between triple backticks)
         fenced_code_blocks = [
             block.strip() for block in self._fenced_code_regex.findall(markdown) if block.strip()
@@ -124,7 +126,7 @@ class Code(Scanner):
 
         return fenced_code_blocks + inline_code
 
-    def scan(self, prompt: str) -> (str, bool, float):
+    def scan(self, prompt: str) -> tuple[str, bool, float]:
         if prompt.strip() == "":
             return prompt, True, 0.0
 

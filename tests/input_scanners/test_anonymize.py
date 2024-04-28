@@ -255,8 +255,12 @@ _zh_preamble = "在接下来的提示中，我将删除某些信息，并且使�
         (
             {
                 "preamble": _zh_preamble,
-                "entity_types": default_entity_types
-                + ["PHONE_NUMBER_ZH", "ORGANIZATION", "LOCATION"],
+                "entity_types": [
+                    *default_entity_types,
+                    "PHONE_NUMBER_ZH",
+                    "ORGANIZATION",
+                    "LOCATION",
+                ],
                 "recognizer_conf": BERT_ZH_NER_CONF,
             },
             "创建一个 SQL insert 语句，将新用户添加到我们的数据库中。姓名是约翰。他的电子邮箱是test@test.com，"

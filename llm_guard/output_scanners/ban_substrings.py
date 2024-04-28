@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 import logging
 import os
-from typing import Sequence, Union
+from typing import Sequence
 
 from llm_guard.input_scanners.ban_substrings import BanSubstrings as InputBanSubstrings, MatchType
 
@@ -28,11 +30,11 @@ class BanSubstrings(Scanner):
         self,
         substrings: Sequence[str],
         *,
-        match_type: Union[MatchType, str] = MatchType.STR,
+        match_type: MatchType | str = MatchType.STR,
         case_sensitive: bool = False,
         redact: bool = False,
         contains_all: bool = False,  # contains any
-    ):
+    ) -> None:
         """
         Initializes BanSubstrings with a match type, case sensitivity option, and a list of substrings.
 
@@ -55,5 +57,5 @@ class BanSubstrings(Scanner):
             contains_all=contains_all,
         )
 
-    def scan(self, prompt: str, output: str) -> (str, bool, float):
+    def scan(self, prompt: str, output: str) -> tuple[str, bool, float]:
         return self._scanner.scan(output)

@@ -1,4 +1,4 @@
-from typing import List
+from __future__ import annotations
 
 import pytest
 
@@ -19,7 +19,7 @@ from llm_guard.output_scanners.ban_competitors import BanCompetitors
     ],
 )
 def test_scan(
-    competitors: List[str],
+    competitors: list[str],
     prompt: str,
     output: str,
     expected_output: str,

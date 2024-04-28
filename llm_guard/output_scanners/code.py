@@ -1,4 +1,6 @@
-from typing import Optional, Sequence
+from __future__ import annotations
+
+from typing import Sequence
 
 from llm_guard.input_scanners.code import Code as InputCode
 from llm_guard.model import Model
@@ -18,11 +20,11 @@ class Code(Scanner):
         self,
         languages: Sequence[str],
         *,
-        model: Optional[Model] = None,
+        model: Model | None = None,
         is_blocked: bool = True,
         threshold: float = 0.5,
         use_onnx: bool = False,
-    ):
+    ) -> None:
         """
         Initializes an instance of the Code class.
 
@@ -45,5 +47,5 @@ class Code(Scanner):
             use_onnx=use_onnx,
         )
 
-    def scan(self, prompt: str, output: str) -> (str, bool, float):
+    def scan(self, prompt: str, output: str) -> tuple[str, bool, float]:
         return self._scanner.scan(output)

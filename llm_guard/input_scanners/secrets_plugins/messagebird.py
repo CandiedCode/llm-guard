@@ -2,6 +2,8 @@
 This plugin searches for MessageBird API tokens and client IDs.
 """
 
+from __future__ import annotations
+
 import re
 
 from detect_secrets.plugins.base import RegexBasedDetector

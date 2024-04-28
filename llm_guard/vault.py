@@ -1,4 +1,4 @@
-from typing import List, Optional, Tuple
+from __future__ import annotations
 
 
 class Vault:
@@ -10,22 +10,22 @@ class Vault:
     and get the list of all stored tuples.
     """
 
-    def __init__(self, tuples: Optional[List[Tuple]] = None):
+    def __init__(self, tuples: list[tuple] | None = None):
         if tuples is None:
             tuples = []
 
         self._tuples = tuples
 
-    def append(self, new_tuple: Tuple):
+    def append(self, new_tuple: tuple):
         self._tuples.append(new_tuple)
 
-    def extend(self, new_tuples: List[Tuple]):
+    def extend(self, new_tuples: list[tuple]):
         self._tuples.extend(new_tuples)
 
-    def remove(self, tuple_to_remove: Tuple):
+    def remove(self, tuple_to_remove: tuple):
         self._tuples.remove(tuple_to_remove)
 
-    def get(self) -> List[Tuple]:
+    def get(self) -> list[tuple]:
         return self._tuples
 
     def placeholder_exists(self, placeholder: str) -> bool:

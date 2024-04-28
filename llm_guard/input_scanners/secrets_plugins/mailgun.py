@@ -2,6 +2,8 @@
 This plugin searches for Mailgun API secrets, public validation keys, and webhook signing keys.
 """
 
+from __future__ import annotations
+
 import re
 
 from detect_secrets.plugins.base import RegexBasedDetector

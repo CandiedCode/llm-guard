@@ -1,4 +1,6 @@
-from typing import Sequence, Union
+from __future__ import annotations
+
+from typing import Sequence
 
 from llm_guard.input_scanners.regex import MatchType, Regex as InputRegex
 
@@ -18,9 +20,9 @@ class Regex(Scanner):
         patterns: Sequence[str],
         *,
         is_blocked: bool = True,
-        match_type: Union[MatchType, str] = MatchType.SEARCH,
+        match_type: MatchType | str = MatchType.SEARCH,
         redact=True,
-    ):
+    ) -> None:
         """
         Initializes an instance of the Regex class.
 
@@ -38,5 +40,5 @@ class Regex(Scanner):
             patterns, is_blocked=is_blocked, match_type=match_type, redact=redact
         )
 
-    def scan(self, prompt: str, output: str) -> (str, bool, float):
+    def scan(self, prompt: str, output: str) -> tuple[str, bool, float]:
         return self._scanner.scan(output)

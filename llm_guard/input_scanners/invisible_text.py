@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import unicodedata
 
 from llm_guard.util import get_logger
@@ -21,10 +23,10 @@ class InvisibleText(Scanner):
         self._banned_categories = ["Cf", "Co", "Cn"]
 
     @staticmethod
-    def contains_unicode(text: str):
+    def contains_unicode(text: str) -> bool:
         return any(ord(char) > 127 for char in text)
 
-    def scan(self, prompt: str) -> (str, bool, float):
+    def scan(self, prompt: str) -> tuple[str, bool, float]:
         if not self.contains_unicode(prompt):
             return prompt, True, 0.0
 

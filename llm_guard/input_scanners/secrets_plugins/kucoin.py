@@ -2,6 +2,8 @@
 This plugin searches for Kucoin Access Tokens and Secret Keys.
 """
 
+from __future__ import annotations
+
 import re
 
 from detect_secrets.plugins.base import RegexBasedDetector

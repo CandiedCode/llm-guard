@@ -1,4 +1,6 @@
-from typing import Optional, Sequence
+from __future__ import annotations
+
+from typing import Sequence
 
 from llm_guard.input_scanners.ban_competitors import BanCompetitors as InputBanCompetitors
 from llm_guard.model import Model
@@ -19,8 +21,8 @@ class BanCompetitors(Scanner):
         *,
         threshold: float = 0.5,
         redact: bool = True,
-        model: Optional[Model] = None,
-    ):
+        model: Model | None = None,
+    ) -> None:
         """
         Initializes BanCompetitors object.
 
@@ -40,5 +42,5 @@ class BanCompetitors(Scanner):
             model=model,
         )
 
-    def scan(self, prompt: str, output: str) -> (str, bool, float):
+    def scan(self, prompt: str, output: str) -> tuple[str, bool, float]:
         return self._scanner.scan(output)

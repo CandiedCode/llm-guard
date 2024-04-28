@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 import re
-from typing import Optional
+from typing import Final
 
 from llm_guard.model import Model
 from llm_guard.transformers_helpers import get_tokenizer_and_model_for_classification, pipeline
@@ -9,7 +11,7 @@ from .base import Scanner
 
 LOGGER = get_logger()
 
-MODEL_SM = Model(
+MODEL_SM: Final[Model] = Model(
     path="vishnun/codenlbert-sm",
     revision="caa3d167fd262c76c7da23cd72c1d24cfdcafd0f",
     onnx_path="protectai/vishnun-codenlbert-sm-onnx",
@@ -17,7 +19,7 @@ MODEL_SM = Model(
     pipeline_kwargs={"max_length": 128, "truncation": True, "return_token_type_ids": True},
 )
 
-MODEL_TINY = Model(
+MODEL_TINY: Final[Model] = Model(
     path="vishnun/codenlbert-tiny",
     revision="2caf5a621b29c50038ee081479a82f192e9a5e69",
     onnx_path="protectai/vishnun-codenlbert-tiny-onnx",
@@ -34,10 +36,10 @@ class BanCode(Scanner):
     def __init__(
         self,
         *,
-        model: Optional[Model] = None,
+        model: Model | None = None,
         threshold: float = 0.97,
         use_onnx: bool = False,
-    ):
+    ) -> None:
         """
         Initializes the BanCode scanner.
 
@@ -63,7 +65,7 @@ class BanCode(Scanner):
             **model.pipeline_kwargs,
         )
 
-    def scan(self, prompt: str) -> (str, bool, float):
+    def scan(self, prompt: str) -> tuple[str, bool, float]:
         if prompt.strip() == "":
             return prompt, True, 0.0
 

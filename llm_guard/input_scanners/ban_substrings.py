@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 import os
 import re
 from enum import Enum
-from typing import Sequence, Union
+from typing import Sequence
 
 from llm_guard.util import get_logger
 
@@ -28,6 +30,8 @@ class MatchType(Enum):
         if self == MatchType.WORD:
             return re.search(r"\b" + re.escape(substring) + r"\b", text) is not None
 
+        return False
+
 
 class BanSubstrings(Scanner):
     """
@@ -40,11 +44,11 @@ class BanSubstrings(Scanner):
         self,
         substrings: Sequence[str],
         *,
-        match_type: Union[MatchType, str] = MatchType.STR,
+        match_type: MatchType | str = MatchType.STR,
         case_sensitive: bool = False,
         redact: bool = False,
         contains_all: bool = False,  # contains any
-    ):
+    ) -> None:
         """
         Initialize BanSubstrings object.
 
@@ -74,7 +78,7 @@ class BanSubstrings(Scanner):
             redacted_text = redacted_text.replace(s, "[REDACTED]")
         return redacted_text
 
-    def scan(self, prompt: str) -> (str, bool, float):
+    def scan(self, prompt: str) -> tuple[str, bool, float]:
         sanitized_prompt = prompt
         matched_substrings = []
         missing_substrings = []

@@ -14,12 +14,16 @@ ignore-init-module-imports = true
 select = [
     'A',  # flake8-builtins
     'ASYNC',  # flake8-async
+    'B',
     'ERA',  # eradicate
     'F',  # Pyflakes
+    'FA',  # Future Annotations
     'I',  # Isort
     'NPY',  # NumPy Rules
     'PERF',  # performance
     'PYI',  # flake8-pyi
+    'RUF',  # Ruff
+    'UP',  # Pyupgrade macros
 ]
 
 [lint.flake8-builtins]

@@ -1,7 +1,7 @@
 from .analyzer import get_analyzer, get_transformers_recognizer
 from .faker import get_fake_value
 from .ner_mapping import *
-from .regex_patterns import get_regex_patterns
+from .regex_patterns import DefaultRegexPatterns, RegexPatternsReuse, get_regex_patterns
 
 __all__ = [
     "get_analyzer",
@@ -14,4 +14,6 @@ __all__ = [
     "BERT_LARGE_NER_CONF",
     "DEBERTA_LAKSHYAKH93_CONF",
     "get_regex_patterns",
+    "DefaultRegexPatterns",
+    "RegexPatternsReuse",
 ]

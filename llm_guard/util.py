@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import importlib
+import importlib.util
 import json
 import logging
 import re
@@ -22,7 +22,11 @@ EXTERNAL_LOGGERS = {
     "transformers",
     "presidio-analyzer",
 }
-CHUNK = NamedTuple("CHUNKS", [("start", int), ("end", int)])
+
+
+class CHUNK(NamedTuple):
+    start: int
+    end: int
 
 
 def configure_logger(log_level: LOG_LEVELS = "INFO"):
@@ -88,7 +92,7 @@ def read_json_file(json_path: str) -> dict[str, list[str]]:
 
     result = {}
     try:
-        with open(json_path, "r") as myfile:
+        with open(json_path) as myfile:
             result = json.load(myfile)
             LOGGER.debug("Loaded json file", path=json_path)
     except FileNotFoundError:

@@ -1,4 +1,6 @@
-from typing import Optional, Sequence, Union
+from __future__ import annotations
+
+from typing import Sequence
 
 from llm_guard.input_scanners.language import Language as InputLanguage, MatchType
 from llm_guard.model import Model
@@ -16,11 +18,11 @@ class Language(Scanner):
         self,
         valid_languages: Sequence[str],
         *,
-        model: Optional[Model] = None,
+        model: Model | None = None,
         threshold: float = 0.7,
-        match_type: Union[MatchType, str] = MatchType.FULL,
+        match_type: MatchType | str = MatchType.FULL,
         use_onnx: bool = False,
-    ):
+    ) -> None:
         """
         Initializes the Language scanner with a list of valid languages.
 
@@ -40,5 +42,5 @@ class Language(Scanner):
             use_onnx=use_onnx,
         )
 
-    def scan(self, prompt: str, output: str) -> (str, bool, float):
+    def scan(self, prompt: str, output: str) -> tuple[str, bool, float]:
         return self._scanner.scan(output)

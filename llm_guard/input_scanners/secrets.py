@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import hashlib
 import os
 import tempfile
@@ -455,7 +457,7 @@ class Secrets(Scanner):
 
         return redacted_value
 
-    def scan(self, prompt: str) -> (str, bool, float):
+    def scan(self, prompt: str) -> tuple[str, bool, float]:
         risk_score = 0.0
         if prompt.strip() == "":
             return prompt, True, risk_score
@@ -472,6 +474,9 @@ class Secrets(Scanner):
         for file in self._secrets.files:
             for found_secret in self._secrets[file]:
                 secret_types.append(found_secret.type)
+
+                if found_secret.secret_value is None:
+                    continue
 
                 character_start_index = prompt.find(found_secret.secret_value, None, None)
                 character_end_index = character_start_index + len(str(found_secret.secret_value))

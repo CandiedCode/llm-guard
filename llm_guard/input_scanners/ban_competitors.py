@@ -1,4 +1,6 @@
-from typing import Optional, Sequence
+from __future__ import annotations
+
+from typing import Final, Sequence
 
 from presidio_anonymizer.core.text_replace_builder import TextReplaceBuilder
 
@@ -9,10 +11,10 @@ from .base import Scanner
 
 LOGGER = get_logger()
 
-MODEL_BASE = Model(
+MODEL_BASE: Final[Model] = Model(
     "tomaarsen/span-marker-bert-base-orgs", revision="312bcdb7bc02c85ab9b8b8fe99849ca28714b29d"
 )
-MODEL_SMALL = Model(
+MODEL_SMALL: Final[Model] = Model(
     "tomaarsen/span-marker-bert-small-orgs", revision="437bd92fcc2b4236b7d7402113d47920793bab46"
 )
 
@@ -30,8 +32,8 @@ class BanCompetitors(Scanner):
         *,
         threshold: float = 0.5,
         redact: bool = True,
-        model: Optional[Model] = None,
-    ):
+        model: Model | None = None,
+    ) -> None:
         """
         Initialize BanCompetitors object.
 
@@ -59,7 +61,7 @@ class BanCompetitors(Scanner):
         if device().type == "cuda":
             self._ner_pipeline = self._ner_pipeline.cuda()
 
-    def scan(self, prompt: str) -> (str, bool, float):
+    def scan(self, prompt: str) -> tuple[str, bool, float]:
         is_detected = False
         text_replace_builder = TextReplaceBuilder(original_text=prompt)
         entities = self._ner_pipeline.predict(prompt)

@@ -2,6 +2,8 @@
 This plugin searches for JFrog-related secrets like API Key and Identity Token.
 """
 
+from __future__ import annotations
+
 import re
 
 from detect_secrets.plugins.base import RegexBasedDetector

@@ -1,4 +1,4 @@
-from typing import Optional
+from __future__ import annotations
 
 from llm_guard.input_scanners.ban_topics import MODEL_DEBERTA_BASE_V2
 from llm_guard.model import Model
@@ -23,10 +23,10 @@ class FactualConsistency(Scanner):
     def __init__(
         self,
         *,
-        model: Optional[Model] = None,
+        model: Model | None = None,
         minimum_score=0.75,
         use_onnx=False,
-    ):
+    ) -> None:
         """
         Initializes an instance of the Refutation class.
 
@@ -49,7 +49,7 @@ class FactualConsistency(Scanner):
         if not use_onnx:
             self._model.eval()
 
-    def scan(self, prompt: str, output: str) -> (str, bool, float):
+    def scan(self, prompt: str, output: str) -> tuple[str, bool, float]:
         if prompt.strip() == "":
             return output, True, 0.0
 

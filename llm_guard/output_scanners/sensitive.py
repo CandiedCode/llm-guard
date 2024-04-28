@@ -1,14 +1,17 @@
-from typing import Dict, List, Optional, Sequence
+from __future__ import annotations
 
 from presidio_anonymizer import AnonymizerEngine
 
 from llm_guard.input_scanners.anonymize import Anonymize, default_entity_types
 from llm_guard.input_scanners.anonymize_helpers import (
     DEBERTA_AI4PRIVACY_v2_CONF,
+    DefaultRegexPatterns,
+    RegexPatternsReuse,
     get_analyzer,
     get_regex_patterns,
     get_transformers_recognizer,
 )
+from llm_guard.input_scanners.anonymize_helpers.ner_mapping import NERConfig
 from llm_guard.util import calculate_risk_score, get_logger
 
 from .base import Scanner
@@ -27,20 +30,20 @@ class Sensitive(Scanner):
     def __init__(
         self,
         *,
-        entity_types: Optional[Sequence[str]] = None,
-        regex_patterns: Optional[List[Dict]] = None,
+        entity_types: list[str] | None = None,
+        regex_patterns: list[DefaultRegexPatterns | RegexPatternsReuse] | None = None,
         redact: bool = False,
-        recognizer_conf: Optional[Dict] = None,
+        recognizer_conf: NERConfig | None = None,
         threshold: float = 0.5,
         use_onnx: bool = False,
-    ):
+    ) -> None:
         """
         Initializes an instance of the Sensitive class.
 
         Parameters:
            entity_types (Optional[Sequence[str]]): The entity types to look for in the output. Defaults to all
                                                entity types.
-           regex_patterns (Optional[List[Dict]]): List of regex patterns to use for detection. Default is None.
+           regex_patterns (Optional[list[Dict]]): list of regex patterns to use for detection. Default is None.
            redact (bool): Redact found sensitive entities. Default to False.
            recognizer_conf (Optional[Dict]): Configuration to recognize PII data. Default is Ai4Privacy DeBERTa.
            threshold (float): Acceptance threshold. Default is 0.
@@ -69,7 +72,7 @@ class Sensitive(Scanner):
         )
         self._anonymizer = AnonymizerEngine()
 
-    def scan(self, prompt: str, output: str) -> (str, bool, float):
+    def scan(self, prompt: str, output: str) -> tuple[str, bool, float]:
         if output.strip() == "":
             return prompt, True, 0.0
 

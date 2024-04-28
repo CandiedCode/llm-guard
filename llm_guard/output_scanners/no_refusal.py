@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 from enum import Enum
-from typing import List, Optional, Union
+from typing import Final
 
 from llm_guard.model import Model
 from llm_guard.transformers_helpers import get_tokenizer_and_model_for_classification, pipeline
@@ -10,7 +12,7 @@ from .base import Scanner
 
 LOGGER = get_logger()
 
-DEFAULT_MODEL = Model(
+DEFAULT_MODEL: Final[Model] = Model(
     path="ProtectAI/distilroberta-base-rejection-v1",
     revision="65584967c3f22ff7723e5370c65e0e76791e6055",
     onnx_path="ProtectAI/distilroberta-base-rejection-v1",
@@ -28,7 +30,7 @@ class MatchType(Enum):
     SENTENCE = "sentence"
     FULL = "full"
 
-    def get_inputs(self, prompt: str) -> List[str]:
+    def get_inputs(self, prompt: str) -> list[str]:
         if self == MatchType.SENTENCE:
             return split_text_by_sentences(prompt)
 
@@ -45,11 +47,11 @@ class NoRefusal(Scanner):
     def __init__(
         self,
         *,
-        model: Optional[Model] = None,
+        model: Model | None = None,
         threshold: float = 0.75,
-        match_type: Union[MatchType, str] = MatchType.FULL,
+        match_type: MatchType | str = MatchType.FULL,
         use_onnx: bool = False,
-    ):
+    ) -> None:
         """
         Initializes an instance of the NoRefusal class.
 
@@ -81,7 +83,7 @@ class NoRefusal(Scanner):
             **model.pipeline_kwargs,
         )
 
-    def scan(self, prompt: str, output: str) -> (str, bool, float):
+    def scan(self, prompt: str, output: str) -> tuple[str, bool, float]:
         if output.strip() == "":
             return output, True, 0.0
 
@@ -113,7 +115,7 @@ class NoRefusalLight(BanSubstrings):
     Refusals are common when the prompt breaches policies defined by the model.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(
             substrings=[
                 "I'm sorry",

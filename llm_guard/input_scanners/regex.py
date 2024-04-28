@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 import re
 from enum import Enum
-from typing import Pattern, Sequence, Union
+from typing import Pattern, Sequence
 
 from presidio_anonymizer.core.text_replace_builder import TextReplaceBuilder
 
@@ -32,9 +34,9 @@ class Regex(Scanner):
         patterns: Sequence[str],
         *,
         is_blocked: bool = True,
-        match_type: Union[MatchType, str] = MatchType.SEARCH,
+        match_type: MatchType | str = MatchType.SEARCH,
         redact: bool = True,
-    ):
+    ) -> None:
         """
         Initializes an instance of the Regex class.
 
@@ -58,7 +60,7 @@ class Regex(Scanner):
         self._is_blocked = is_blocked
         self._redact = redact
 
-    def scan(self, prompt: str) -> (str, bool, float):
+    def scan(self, prompt: str) -> tuple[str, bool, float]:
         text_replace_builder = TextReplaceBuilder(original_text=prompt)
         for pattern in self._patterns:
             match = self._match_type.match(pattern, prompt)

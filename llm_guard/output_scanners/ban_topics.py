@@ -1,4 +1,6 @@
-from typing import Optional, Sequence
+from __future__ import annotations
+
+from typing import Sequence
 
 from llm_guard.input_scanners.ban_topics import BanTopics as InputBanTopics
 from llm_guard.model import Model
@@ -18,9 +20,9 @@ class BanTopics(Scanner):
         topics: Sequence[str],
         *,
         threshold: float = 0.75,
-        model: Optional[Model] = None,
+        model: Model | None = None,
         use_onnx: bool = False,
-    ):
+    ) -> None:
         """
         Initializes BanTopics with a list of topics and a probability threshold.
 
@@ -41,5 +43,5 @@ class BanTopics(Scanner):
             use_onnx=use_onnx,
         )
 
-    def scan(self, prompt: str, output: str) -> (str, bool, float):
+    def scan(self, prompt: str, output: str) -> tuple[str, bool, float]:
         return self._scanner.scan(output)
